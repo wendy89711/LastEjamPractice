@@ -10,16 +10,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     boolean logon = false;
-    private EditText username;
+    boolean login = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        username = findViewById(R.id.un);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void enter(View view) {
-        Intent username = new Intent(this,LoginActivity.class);
+        Intent username = new Intent(this, Username.class);
         startActivityForResult(username,1);
     }
 
@@ -48,7 +51,17 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode != RESULT_OK) {
                 finish();
             } else {
-                username.setText(getSharedPreferences("test",MODE_PRIVATE).getString("user",""));
+                Switch sw = findViewById(R.id.switch);
+                sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        login = isChecked;
+                        TextView text = findViewById(R.id.switch);
+                        text.setText(login ? "登入" : "註冊");
+                        TextView register = findViewById(R.id.registerQ);
+                        register.setText(login ? "登入" : "註冊");
+                    }
+                });
             }
         }
     }
